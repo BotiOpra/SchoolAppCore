@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="SchoolAppCore.Views.AdminViews.SubjectManagementPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Subject Management Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+
+        <ListView Grid.Row="1" x:Name="studentListBox" SelectedItem="{Binding SelectedSubject}">
+            <ListViewItem Content="Student 1" />
+            <ListViewItem Content="Student 2" />
+            <ListViewItem Content="Student 3" />
+        </ListView>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add" Margin="5" />
+            <Button Content="Delete" Margin="5" Command="{Binding DeleteSubjectCommand}"/>
+            <Button Content="Modify" Margin="5" Command="{Binding ModifySubjectCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

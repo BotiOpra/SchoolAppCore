@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="SchoolAppCore.Views.StudentPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SchoolAppCore.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Student Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListView>
+                <ListViewItem Content="Kecske"/>
+                <ListViewItem Content="Pasztor"/>
+                <ListViewItem Content="Vagyok"/>
+            </ListView>
+
+            <Button Grid.Column="1" Content="Download Course Material" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <TextBlock Text="Grades"/>
+                    <ListView>
+                        <ListViewItem Content="Column 3 - Row 1"/>
+                        <ListViewItem Content="Column 3 - Row 2"/>
+                        <ListViewItem Content="Column 3 - Row 3"/>
+                    </ListView>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0 5 0 0">
+                    <TextBlock Text="Absences"/>
+                    <ListView>
+                        <ListViewItem Content="Column 3 - Row 1"/>
+                        <ListViewItem Content="Column 3 - Row 2"/>
+                        <ListViewItem Content="Column 3 - Row 3"/>
+                    </ListView>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Text="Subject GPA:" Margin="0 5 0 0"/>
+
+            </Grid>
+        </Grid>
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Padding="5" Margin="0 10 0 0">
+            <Label Content="Final GPATxt" HorizontalAlignment="Center" FontWeight="Bold" FontStyle="Italic"/>
+        </Border>
+    </Grid>
+</UserControl>
