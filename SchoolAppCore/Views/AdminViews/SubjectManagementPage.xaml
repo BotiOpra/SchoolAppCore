@@ -3,29 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews"
+             xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews" xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
+             xmlns:basemodels="clr-namespace:SchoolAppCore.Views"
+             xmlns:vms="clr-namespace:SchoolAppCore.ViewModels.EntityViewModels" xmlns:adminviewmodels="clr-namespace:SchoolAppCore.ViewModels.AdminViewModels" d:DataContext="{d:DesignInstance Type=adminviewmodels:SubjectManagementViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Subject Management Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+    <Grid>
+        <custom:Modal Panel.ZIndex="100" IsOpen="True">
+            <local:DynamicInputControl x:Name="inputControl" ModelType="{x:Type vms:SubjectVM}" AddCommand="{Binding AddSubjectCommand}"/>
+        </custom:Modal>
 
-        <ListView Grid.Row="1" x:Name="studentListBox" SelectedItem="{Binding SelectedSubject}">
-            <ListViewItem Content="Student 1" />
-            <ListViewItem Content="Student 2" />
-            <ListViewItem Content="Student 3" />
-        </ListView>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Add" Margin="5" />
-            <Button Content="Delete" Margin="5" Command="{Binding DeleteSubjectCommand}"/>
-            <Button Content="Modify" Margin="5" Command="{Binding ModifySubjectCommand}"/>
-        </StackPanel>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Subject Management Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+
+            <ListView Grid.Row="1" x:Name="studentListBox"
+                  ItemsSource="{Binding SubjectList}"
+                  SelectedItem="{Binding SelectedSubject}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=SubjectName}" Header="Subject" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=ProfessorName}" Header="Professor" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Add" Margin="5" Command="{Binding AddSubjectCommand}"/>
+                <Button Content="Delete" Margin="5" Command="{Binding DeleteSubjectCommand}"/>
+                <Button Content="Modify" Margin="5" Command="{Binding ModifySubjectCommand}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

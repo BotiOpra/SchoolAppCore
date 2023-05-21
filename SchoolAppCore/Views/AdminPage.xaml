@@ -35,7 +35,6 @@
         <!-- Content -->
         <Grid Grid.Column="1" Grid.Row="1" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 

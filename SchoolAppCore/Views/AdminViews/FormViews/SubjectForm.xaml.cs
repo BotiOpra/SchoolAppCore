@@ -1,5 +1,4 @@
-﻿using SchoolAppCore.ViewModels.EntityViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SchoolAppCore.Views.AdminViews
+namespace SchoolAppCore.Views.AdminViews.FormViews
 {
-    /// <summary>
-    /// Interaction logic for SubjectManagementPage.xaml
-    /// </summary>
-    public partial class SubjectManagementPage : UserControl
-    {
-        public SubjectManagementPage()
-        {
-            InitializeComponent();
-        }
-    }
+	/// <summary>
+	/// Interaction logic for SubjectForm.xaml
+	/// </summary>
+	public partial class SubjectForm : UserControl
+	{
+		public SubjectForm()
+		{
+			InitializeComponent();
+		}
+	}
 }
