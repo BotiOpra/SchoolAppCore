@@ -3,6 +3,7 @@ using SchoolAppCore.ViewModels.EntityViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,110 +25,112 @@ namespace SchoolAppCore.Views.AdminViews
 	/// </summary>
 	public partial class DynamicInputControl : UserControl
 	{
-		public Type ModelType
+
+		private object EntityInstance;
+		public List<PropertyItem> Properties { get; private set; }
+
+		public Type EntityType
 		{
-			get { return (Type)GetValue(ModelTypeProperty); }
-			set 
+			get { return (Type)GetValue(EntityTypeProperty); }
+			set { SetValue(EntityTypeProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for EntityType.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty EntityTypeProperty =
+			DependencyProperty.Register("EntityType", typeof(Type), typeof(DynamicInputControl), new PropertyMetadata(null, OnEntityTypeChanged));
+
+		private static void OnEntityTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var control = d as DynamicInputControl;
+			control.LoadProperties();
+		}
+
+		private void LoadProperties()
+		{
+			if (EntityType != null)
 			{
-				SetValue(ModelTypeProperty, value); 
+				Properties = new List<PropertyItem>(EntityType.GetProperties().Select(p => new PropertyItem() { Name = p.Name }));
 			}
 		}
 
-		// Using a DependencyProperty as the backing store for ModelType.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty ModelTypeProperty =
-			DependencyProperty.Register("ModelType", typeof(Type), typeof(DynamicInputControl), new PropertyMetadata(null, OnModelObjectChanged));
 
+		//public static readonly DependencyProperty PropertiesProperty =
+		//	DependencyProperty.Register("Properties", typeof(IEnumerable<PropertyItem>), typeof(DynamicInputControl));
 
-		public ICommand AddCommand
+		public static readonly DependencyProperty OKCommandProperty =
+			DependencyProperty.Register("OKCommand", typeof(ICommand), typeof(DynamicInputControl));
+
+		public static readonly DependencyProperty CancelCommandProperty =
+			DependencyProperty.Register("CancelCommand", typeof(ICommand), typeof(DynamicInputControl));
+
+		//public IEnumerable<PropertyItem> Properties
+		//{
+		//	get { return (IEnumerable<PropertyItem>)GetValue(PropertiesProperty); }
+		//	set { SetValue(PropertiesProperty, value); }
+		//}
+
+		public ICommand OKCommand
 		{
-			get { return (ICommand)GetValue(AddCommandProperty); }
-			set { SetValue(AddCommandProperty, value); }
+			get { return (ICommand)GetValue(OKCommandProperty); }
+			set { SetValue(OKCommandProperty, value); }
 		}
 
-		// Using a DependencyProperty as the backing store for AddCommand.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty AddCommandProperty =
-			DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(DynamicInputControl), new PropertyMetadata(null));
-
+		public ICommand CancelCommand
+		{
+			get { return (ICommand)GetValue(CancelCommandProperty); }
+			set { SetValue(CancelCommandProperty, value); }
+		}
 
 		public DynamicInputControl()
 		{
 			InitializeComponent();
-			GenerateInputFields();
 		}
 
-		private static void OnModelObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private void CancelButton_Click(object sender, RoutedEventArgs e)
 		{
-			var control = (DynamicInputControl)d;
-			control.GenerateInputFields();
+			MessageBox.Show("Cancel button clicked!");
 		}
 
-		private void GenerateInputFields()
+		private void OKButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (ModelType == null)
-				return;
+			// Create an instance of the EntityType
+			var entity = Activator.CreateInstance(EntityType);
 
-			var properties = ModelType.GetProperties();
-
-			int row = 0;
-			foreach (var property in properties)
+			// Set the property values based on the user input
+			foreach (var property in Properties)
 			{
-				//fix
-				if (!property.CanWrite)
-					continue;
-
-				StackPanel inputStackPanel = new StackPanel() 
+				PropertyInfo propertyInfo = EntityType.GetProperty(property.Name);
+				if (propertyInfo != null)
 				{
-					Margin=new Thickness(5)
-				};
-
-				var label = new Label
-				{
-					Content = property.Name
-				};
-
-				inputStackPanel.Children.Add(label);
-
-				var textBox = new TextBox();
-				//textBox.SetBinding(TextBox.TextProperty, new Binding(property.Name) { Source = ModelObject });
-
-				inputStackPanel.Children.Add(textBox);
-
-				// Add label and input field to the container (e.g., a StackPanel)
-				// You can customize the layout and styling based on your requirements.
-
-				// Example:
-				inputContainer.RowDefinitions.Add(new RowDefinition());
-				Grid.SetRow(inputStackPanel, row++);
-
-				inputContainer.Children.Add(inputStackPanel);
+					propertyInfo.SetValue(entity, property.Value);
+				}
 			}
 
-			StackPanel buttons = new StackPanel()
-			{ 
-				Orientation = Orientation.Horizontal,
-				HorizontalAlignment = HorizontalAlignment.Right
-			};
+			// Store the entity instance
+			EntityInstance = entity;
 
-			buttons.Children.Add(new Button()
-			{
-				Content = "Close",
-				Margin=new Thickness(10)
-			});
+			MessageBox.Show("OK button clicked!");
+		}
+	}
 
-			buttons.Children.Add(new Button()
-			{
-				Content = "Ok",
-				Margin = new Thickness(10),
-				Command = AddCommand
+	public class PropertyItem : DependencyObject
+	{
+		public static readonly DependencyProperty NameProperty =
+			DependencyProperty.Register("Name", typeof(string), typeof(PropertyItem));
 
-			});
+		public static readonly DependencyProperty ValueProperty =
+			DependencyProperty.Register("Value", typeof(object), typeof(PropertyItem));
 
-			inputContainer.RowDefinitions.Add(new RowDefinition());
-			Grid.SetRow(buttons, row++);
+		public string Name
+		{
+			get { return (string)GetValue(NameProperty); }
+			set { SetValue(NameProperty, value); }
+		}
 
-			inputContainer.Children.Add(buttons);
-
-
+		public object Value
+		{
+			get { return GetValue(ValueProperty); }
+			set { SetValue(ValueProperty, value); }
 		}
 	}
 

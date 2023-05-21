@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using SchoolAppCore.Models;
+using SchoolAppCore.Models.DTOs;
 using SchoolAppCore.Stores;
 using SchoolAppCore.ViewModels.EntityViewModels;
 using System;
@@ -42,18 +43,13 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 		}
 
 		[RelayCommand]
-		private void AddSubject()
+		private void AddSubject(object? obj)
 		{
-			MessageBox.Show("Added Subject");
+			//MessageBox.Show($"Added Subject: {name}");
 
-			var subj = new Subject()
-			{
-				SubjectId = 4,
-				SubjectName = "Literature",
-				ProfId = 2
-			};
+			var subjDto = (SubjectDTO)obj;
 
-			_context.Database.ExecuteSql($"InsertSubject {subj.SubjectName}, {subj.ProfId}");
+			_context.Database.ExecuteSql($"InsertSubject {subjDto.SubjectName}, {1}");
 			_context.SaveChanges();
 
 			UpdateFromDatabase();
