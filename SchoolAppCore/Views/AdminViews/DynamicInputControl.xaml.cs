@@ -109,7 +109,10 @@ namespace SchoolAppCore.Views.AdminViews
 			// Store the entity instance
 			EntityInstance = entity;
 
-			MessageBox.Show("OK button clicked!");
+			if (OKCommand?.CanExecute(EntityInstance) == true)
+			{
+				OKCommand.Execute(EntityInstance);
+			}
 		}
 	}
 
