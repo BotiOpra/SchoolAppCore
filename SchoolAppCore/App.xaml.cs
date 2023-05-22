@@ -59,7 +59,10 @@ namespace SchoolAppCore
 
 		private LoginViewModel CreateLoginViewModel(IServiceProvider serviceProvider)
 		{
-			return new LoginViewModel(serviceProvider.GetRequiredService<NavigationStore>());
+			return new LoginViewModel(
+				serviceProvider.GetRequiredService<NavigationStore>(),
+				serviceProvider.GetRequiredService<ModalNavigationStore>(),
+				serviceProvider.GetRequiredService<AdminNavigationStore>());
 		}
 
 		protected override void OnStartup(StartupEventArgs e)

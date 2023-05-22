@@ -11,6 +11,8 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
+    public virtual ICollection<HeadTeacher> HeadTeachers { get; set; } = new List<HeadTeacher>();
+
     public virtual ICollection<Professor> Professors { get; set; } = new List<Professor>();
 
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();

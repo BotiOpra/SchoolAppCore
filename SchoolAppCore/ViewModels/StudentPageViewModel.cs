@@ -14,11 +14,11 @@ namespace SchoolAppCore.ViewModels
 {
 	public partial class StudentPageViewModel : ObservableObject
 	{
-		private readonly NavigationStore _navigationStore;
+		private readonly ModalNavigationStore _navigationStore;
 		private readonly Student _student;
 
 		private readonly SchoolDbContext _context;
-		public StudentPageViewModel(Student student, NavigationStore navigationStore) 
+		public StudentPageViewModel(Student student, ModalNavigationStore navigationStore) 
 		{
 			_navigationStore = navigationStore;
 			_student = student;

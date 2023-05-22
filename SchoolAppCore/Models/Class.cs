@@ -15,6 +15,8 @@ public partial class Class
 
     public virtual ICollection<ClassSubject> ClassSubjects { get; set; } = new List<ClassSubject>();
 
+    public virtual ICollection<HeadTeacher> HeadTeachers { get; set; } = new List<HeadTeacher>();
+
     public virtual Professor? Prof { get; set; }
 
     public virtual Specialization? Spec { get; set; }
