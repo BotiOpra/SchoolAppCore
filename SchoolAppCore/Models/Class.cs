@@ -11,9 +11,11 @@ public partial class Class
 
     public int? SpecId { get; set; }
 
+    public int? ProfId { get; set; }
+
     public virtual ICollection<ClassSubject> ClassSubjects { get; set; } = new List<ClassSubject>();
 
-    public virtual Professor? Professor { get; set; }
+    public virtual Professor? Prof { get; set; }
 
     public virtual Specialization? Spec { get; set; }
 

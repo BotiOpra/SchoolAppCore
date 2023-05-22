@@ -13,7 +13,5 @@ public partial class Subject
 
     public virtual ICollection<ClassSubject> ClassSubjects { get; set; } = new List<ClassSubject>();
 
-    public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
-
     public virtual Professor? Prof { get; set; }
 }

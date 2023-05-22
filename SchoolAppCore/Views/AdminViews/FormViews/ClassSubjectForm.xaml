@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SchoolAppCore.Views.AdminViews.FormViews.SubjectForm"
+﻿<UserControl x:Class="SchoolAppCore.Views.AdminViews.FormViews.ClassSubjectForm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,19 +14,14 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="5">
-            <TextBlock Text="Subject Name:"/>
-            <TextBox Text="{Binding SubjectName}"/>
-        </StackPanel>
-
-        <StackPanel Grid.Row="1" Margin="5">
-            <TextBlock Text="Professor:"/>
+        <StackPanel Margin="5">
+            <TextBlock Text="Select Subject:"/>
             <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Professors}"
                       SelectedItem="{Binding SelectedProfessor}"
                       DisplayMemberPath="FullName"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Cancel" Margin="10" Command="{Binding CancelCommand}"/>
             <Button Content="Ok" Margin="10" Command="{Binding AddSubjectCommand}"/>
         </StackPanel>

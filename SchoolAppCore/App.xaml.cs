@@ -24,6 +24,7 @@ namespace SchoolAppCore
 			services.AddSingleton<NavigationStore>();
 			services.AddSingleton<MainViewModel>();
 			services.AddSingleton<AdminNavigationStore>();
+			services.AddSingleton<ModalNavigationStore>();
 			services.AddSingleton<NavigationService>(s => CreateInitialNavigationService(s));
 
 			services.AddTransient<LoginViewModel>(CreateLoginViewModel);
@@ -42,8 +43,8 @@ namespace SchoolAppCore
 		private AdminPageViewModel CreateAdminPageViewModel(IServiceProvider serviceProvider)
 		{
 			return new AdminPageViewModel(
-				serviceProvider.GetRequiredService<NavigationStore>(),
-				serviceProvider.GetRequiredService<AdminNavigationStore>());
+				serviceProvider.GetRequiredService<AdminNavigationStore>(),
+				serviceProvider.GetRequiredService<ModalNavigationStore>());
 		}
 
 		private TeacherPageViewModel CreateTeacherViewModel(IServiceProvider serviceProvider)

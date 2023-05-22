@@ -19,8 +19,6 @@ public partial class SchoolDbContext : DbContext
 
     public virtual DbSet<ClassSubject> ClassSubjects { get; set; }
 
-    public virtual DbSet<Grade> Grades { get; set; }
-
     public virtual DbSet<Professor> Professors { get; set; }
 
     public virtual DbSet<Specialization> Specializations { get; set; }
@@ -37,20 +35,27 @@ public partial class SchoolDbContext : DbContext
     {
         modelBuilder.Entity<Class>(entity =>
         {
-            entity.HasKey(e => e.ClassId).HasName("PK__Classes__FDF479864994FDB9");
+            entity.HasKey(e => e.ClassId).HasName("PK__Classes__FDF479867D7AB9C4");
+
+            entity.HasIndex(e => e.ProfId, "UQ__Classes__44D38545DDBD6F54").IsUnique();
 
             entity.Property(e => e.ClassId).HasColumnName("class_id");
             entity.Property(e => e.ClassYear).HasColumnName("class_year");
+            entity.Property(e => e.ProfId).HasColumnName("prof_id");
             entity.Property(e => e.SpecId).HasColumnName("spec_id");
+
+            entity.HasOne(d => d.Prof).WithOne(p => p.Class)
+                .HasForeignKey<Class>(d => d.ProfId)
+                .HasConstraintName("FK__Classes__prof_id__37703C52");
 
             entity.HasOne(d => d.Spec).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.SpecId)
-                .HasConstraintName("FK__Classes__spec_id__71D1E811");
+                .HasConstraintName("FK__Classes__spec_id__367C1819");
         });
 
         modelBuilder.Entity<ClassSubject>(entity =>
         {
-            entity.HasKey(e => new { e.ClassId, e.SubjectId }).HasName("PK__ClassSub__E8F436E0524A6457");
+            entity.HasKey(e => new { e.ClassId, e.SubjectId }).HasName("PK__ClassSub__E8F436E0ADEAD827");
 
             entity.ToTable("ClassSubject");
 
@@ -60,41 +65,18 @@ public partial class SchoolDbContext : DbContext
 
             entity.HasOne(d => d.Class).WithMany(p => p.ClassSubjects)
                 .HasForeignKey(d => d.ClassId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ClassSubject_Class");
 
             entity.HasOne(d => d.Subject).WithMany(p => p.ClassSubjects)
                 .HasForeignKey(d => d.SubjectId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ClassSubject_Subject");
-        });
-
-        modelBuilder.Entity<Grade>(entity =>
-        {
-            entity.HasKey(e => e.GradeId).HasName("PK__Grades__3A8F732C91454BE6");
-
-            entity.Property(e => e.GradeId).HasColumnName("grade_id");
-            entity.Property(e => e.GradeVal).HasColumnName("grade_val");
-            entity.Property(e => e.StudentId).HasColumnName("student_id");
-            entity.Property(e => e.SubjectId).HasColumnName("subject_id");
-
-            entity.HasOne(d => d.Student).WithMany(p => p.Grades)
-                .HasForeignKey(d => d.StudentId)
-                .HasConstraintName("FK__Grades__student___03F0984C");
-
-            entity.HasOne(d => d.Subject).WithMany(p => p.Grades)
-                .HasForeignKey(d => d.SubjectId)
-                .HasConstraintName("FK__Grades__subject___04E4BC85");
         });
 
         modelBuilder.Entity<Professor>(entity =>
         {
-            entity.HasKey(e => e.ProfId).HasName("PK__Professo__44D3854432F319F2");
-
-            entity.HasIndex(e => e.ClassId, "UQ__Professo__FDF47987B5C31086").IsUnique();
+            entity.HasKey(e => e.ProfId).HasName("PK__Professo__44D38544E26EC8DD");
 
             entity.Property(e => e.ProfId).HasColumnName("prof_id");
-            entity.Property(e => e.ClassId).HasColumnName("class_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -111,15 +93,11 @@ public partial class SchoolDbContext : DbContext
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("password");
-
-            entity.HasOne(d => d.Class).WithOne(p => p.Professor)
-                .HasForeignKey<Professor>(d => d.ClassId)
-                .HasConstraintName("FK__Professor__class__7C4F7684");
         });
 
         modelBuilder.Entity<Specialization>(entity =>
         {
-            entity.HasKey(e => e.SpecId).HasName("PK__Speciali__F670C56779431C82");
+            entity.HasKey(e => e.SpecId).HasName("PK__Speciali__F670C5676C0CEF2E");
 
             entity.ToTable("Specialization");
 
@@ -132,7 +110,7 @@ public partial class SchoolDbContext : DbContext
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.StudentId).HasName("PK__Students__2A33069A048A5987");
+            entity.HasKey(e => e.StudentId).HasName("PK__Students__2A33069A9EA7A431");
 
             entity.Property(e => e.StudentId).HasColumnName("student_id");
             entity.Property(e => e.ClassId).HasColumnName("class_id");
@@ -155,14 +133,16 @@ public partial class SchoolDbContext : DbContext
 
             entity.HasOne(d => d.Class).WithMany(p => p.Students)
                 .HasForeignKey(d => d.ClassId)
-                .HasConstraintName("FK__Students__class___74AE54BC");
+                .HasConstraintName("FK__Students__class___3A4CA8FD");
         });
 
         modelBuilder.Entity<Subject>(entity =>
         {
-            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__5004F6608738C79A");
+            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__5004F660FCFB211D");
 
             entity.ToTable("Subject");
+
+            entity.HasIndex(e => e.ProfId, "UQ__Subject__44D385451EB87845").IsUnique();
 
             entity.Property(e => e.SubjectId).HasColumnName("subject_id");
             entity.Property(e => e.ProfId).HasColumnName("prof_id");
@@ -171,9 +151,9 @@ public partial class SchoolDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("subject_name");
 
-            entity.HasOne(d => d.Prof).WithMany(p => p.Subjects)
-                .HasForeignKey(d => d.ProfId)
-                .HasConstraintName("FK__Subject__prof_id__01142BA1");
+            entity.HasOne(d => d.Prof).WithOne(p => p.Subject)
+                .HasForeignKey<Subject>(d => d.ProfId)
+                .HasConstraintName("FK__Subject__prof_id__32AB8735");
         });
 
         OnModelCreatingPartial(modelBuilder);

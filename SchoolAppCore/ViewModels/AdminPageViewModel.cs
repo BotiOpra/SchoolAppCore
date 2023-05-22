@@ -13,18 +13,18 @@ namespace SchoolAppCore.ViewModels
 {
 	public partial class AdminPageViewModel : ObservableObject
 	{
-		private readonly NavigationStore _navigationStore;
 		private readonly AdminNavigationStore _adminNavigationStore;
+		private readonly ModalNavigationStore _modalNavigationStore;
 
-		public ObservableObject CurrentManagementViewModel => _adminNavigationStore.CurrentViewModel;
-
-		public AdminPageViewModel(NavigationStore navigationStore, AdminNavigationStore adminNavigationStore)
+		public AdminPageViewModel(AdminNavigationStore adminNavigationStore, ModalNavigationStore modalNavigationStore)
 		{
-			_navigationStore = navigationStore;
 			_adminNavigationStore = adminNavigationStore;
+			_modalNavigationStore = modalNavigationStore;
 
 			_adminNavigationStore.CurrentViewModelChanged += OnCurrentManagementViewModelChanged;
 		}
+
+		public ObservableObject CurrentManagementViewModel => _adminNavigationStore.CurrentViewModel;
 
 		private void OnCurrentManagementViewModelChanged()
 		{
@@ -34,25 +34,25 @@ namespace SchoolAppCore.ViewModels
 		[RelayCommand]
 		public void NavigateStudentManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new StudentManagementViewModel(_adminNavigationStore); 
+			_adminNavigationStore.CurrentViewModel = new StudentManagementViewModel(_adminNavigationStore, _modalNavigationStore); 
 		}
 
 		[RelayCommand]
 		public void NavigateTeacherManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new TeacherManagementViewModel(_adminNavigationStore);
+			_adminNavigationStore.CurrentViewModel = new TeacherManagementViewModel(_adminNavigationStore, _modalNavigationStore);
 		}
 
 		[RelayCommand]
 		public void NavigateClassManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new ClassManagementViewModel(_adminNavigationStore);
+			_adminNavigationStore.CurrentViewModel = new ClassManagementViewModel(_modalNavigationStore);
 		}
 
 		[RelayCommand]
 		public void NavigateSubjectManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new SubjectManagementViewModel(_adminNavigationStore);
+			_adminNavigationStore.CurrentViewModel = new SubjectManagementViewModel(_modalNavigationStore);
 		}
 	}
 }

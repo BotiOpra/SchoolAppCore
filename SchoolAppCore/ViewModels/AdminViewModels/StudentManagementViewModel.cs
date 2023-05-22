@@ -14,10 +14,13 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 	public partial class StudentManagementViewModel : ObservableObject
 	{
 		private readonly AdminNavigationStore _adminPageViewModel;
+		private readonly ModalNavigationStore _modalNavigationStore;
 
-		public StudentManagementViewModel(AdminNavigationStore adminPageViewModel)
+
+		public StudentManagementViewModel(AdminNavigationStore adminPageViewModel, ModalNavigationStore modalNavigationStore)
 		{
 			_adminPageViewModel = adminPageViewModel;
+			_modalNavigationStore = modalNavigationStore;
 		}
 	}
 }

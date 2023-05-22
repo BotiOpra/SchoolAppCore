@@ -6,14 +6,18 @@
              xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews" xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
              xmlns:dtos="clr-namespace:SchoolAppCore.Models.DTOs"
              xmlns:vms="clr-namespace:SchoolAppCore.ViewModels.EntityViewModels" xmlns:adminviewmodels="clr-namespace:SchoolAppCore.ViewModels.AdminViewModels"
+             xmlns:forms="clr-namespace:SchoolAppCore.Views.AdminViews.FormViews"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
     <Grid>
-        <custom:Modal Panel.ZIndex="100" IsOpen="True">
-            <local:DynamicInputControl Width="200"
-                                       OKCommand="{Binding AddSubjectCommand}"
-                                       EntityType="{x:Type dtos:SubjectDTO}"/>
+        <custom:Modal Panel.ZIndex="100" IsOpen="{Binding IsModalOpen}">
+            <ContentControl Content="{Binding CurrentModalViewModel}"/>
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type adminviewmodels:SubjectFormViewModel}">
+                    <forms:SubjectForm Width="200"/>
+                </DataTemplate>
+            </ContentControl.Resources>
         </custom:Modal>
 
         <Grid Margin="10">

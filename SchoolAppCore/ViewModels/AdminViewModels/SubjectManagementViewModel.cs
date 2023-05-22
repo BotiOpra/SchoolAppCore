@@ -19,7 +19,7 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 	public partial class SubjectManagementViewModel : ObservableObject
 	{
 		private readonly SchoolDbContext _context;
-		private readonly AdminNavigationStore _adminNavigationStore;
+		private readonly ModalNavigationStore _modalNavigationStore;
 
 		[ObservableProperty]
 		[NotifyCanExecuteChangedFor(nameof(DeleteSubjectCommand))]
@@ -29,12 +29,13 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 		[ObservableProperty]
 		ObservableCollection<SubjectVM> subjectList;
 
-		public SubjectManagementViewModel(AdminNavigationStore adminNavigationStore)
+		public SubjectManagementViewModel(ModalNavigationStore modalNavigationStore)
 		{
 			_context = new SchoolDbContext();
+			_modalNavigationStore = modalNavigationStore;
 
+			_modalNavigationStore.CurrentViewModelChanged += OnCurrentModalViewModelChanged;
 
-			_adminNavigationStore = adminNavigationStore;
 			SubjectList = new ObservableCollection<SubjectVM>
 				(
 					_context.Subjects.Include(s => s.Prof)
@@ -42,20 +43,21 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 				);
 		}
 
-		[RelayCommand]
-		private void AddSubject(object? obj)
+		public ObservableObject CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
+
+		private void OnCurrentModalViewModelChanged()
 		{
-			//MessageBox.Show($"Added Subject: {name}");
-
-			var subjDto = (SubjectDTO)obj;
-
-			_context.Database.ExecuteSql($"InsertSubject {subjDto.SubjectName}, {1}");
-			_context.SaveChanges();
-
-			UpdateFromDatabase();
+			OnPropertyChanged(nameof(CurrentModalViewModel));
+			OnPropertyChanged(nameof(IsModalOpen));
 		}
 
-		private void UpdateFromDatabase()
+		[RelayCommand]
+		private void AddSubject()
+		{
+			_modalNavigationStore.CurrentViewModel = new SubjectFormViewModel(this, _context, _modalNavigationStore);
+		}
+
+		public void UpdateFromDatabase()
 		{
 			SubjectList = new ObservableCollection<SubjectVM>
 				(
@@ -71,7 +73,6 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 
 			var subjectVM = SelectedSubject as SubjectVM;
 
-
 			_context.Database.ExecuteSql($"RemoveSubject {subjectVM.SubjectId}");
 			_context.SaveChanges();
 
@@ -85,6 +86,8 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 
 			subject.SubjectName = "Kecskepasztor";
 		}
+
+		public bool IsModalOpen => _modalNavigationStore.IsOpen;
 
 		private bool IsSubjectSelected()
 		{

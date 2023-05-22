@@ -15,9 +15,7 @@ public partial class Professor
 
     public string? Password { get; set; }
 
-    public int? ClassId { get; set; }
-
     public virtual Class? Class { get; set; }
 
-    public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();
+    public virtual Subject? Subject { get; set; }
 }
