@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="SchoolAppCore.Views.AdminViews.SpecializationManagementPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews"
+        mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Specialization Management Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Specializations}" SelectedItem="{Binding SelectedSpecialization}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="True" 
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Specialization Name" Binding="{Binding SpecName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button  HorizontalAlignment="Right" Content="Save" Command="{Binding SaveCommand}"/>
+            <Button HorizontalAlignment="Right" Content="Delete" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -34,13 +34,13 @@ namespace SchoolAppCore.ViewModels
 		[RelayCommand]
 		public void NavigateStudentManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new StudentManagementViewModel(_adminNavigationStore, _modalNavigationStore); 
+			_adminNavigationStore.CurrentViewModel = new StudentManagementViewModel(_modalNavigationStore);
 		}
 
 		[RelayCommand]
 		public void NavigateTeacherManagement()
 		{
-			_adminNavigationStore.CurrentViewModel = new TeacherManagementViewModel(_adminNavigationStore, _modalNavigationStore);
+			_adminNavigationStore.CurrentViewModel = new TeacherManagementViewModel(_modalNavigationStore);
 		}
 
 		[RelayCommand]
@@ -53,6 +53,12 @@ namespace SchoolAppCore.ViewModels
 		public void NavigateSubjectManagement()
 		{
 			_adminNavigationStore.CurrentViewModel = new SubjectManagementViewModel(_modalNavigationStore);
+		}
+
+		[RelayCommand]
+		public void NavigateSpecializationManagement()
+		{
+			_adminNavigationStore.CurrentViewModel = new SpecializationManagementViewModel(_modalNavigationStore);
 		}
 	}
 }

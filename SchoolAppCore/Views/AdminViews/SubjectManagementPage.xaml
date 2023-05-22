@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SchoolAppCore.Views.AdminViews" xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
-             xmlns:dtos="clr-namespace:SchoolAppCore.Models.DTOs"
              xmlns:vms="clr-namespace:SchoolAppCore.ViewModels.EntityViewModels" xmlns:adminviewmodels="clr-namespace:SchoolAppCore.ViewModels.AdminViewModels"
              xmlns:forms="clr-namespace:SchoolAppCore.Views.AdminViews.FormViews"
              mc:Ignorable="d" 

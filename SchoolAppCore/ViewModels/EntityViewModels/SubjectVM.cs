@@ -30,24 +30,6 @@ namespace SchoolAppCore.ViewModels.EntityViewModels
 			}
 		}
 
-		public string SubjectName1
-		{
-			get => subject.SubjectName;
-			set
-			{
-				SetProperty(subject.SubjectName, value, subject, (s, n) => s.SubjectName = n);
-			}
-		}
-
-		public string SubjectName2
-		{
-			get => subject.SubjectName;
-			set
-			{
-				SetProperty(subject.SubjectName, value, subject, (s, n) => s.SubjectName = n);
-			}
-		}
-
 		public Professor professor
 		{
 			get => subject.Prof;

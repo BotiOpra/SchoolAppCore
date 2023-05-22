@@ -28,6 +28,7 @@
         <StackPanel Grid.Column="0" Grid.RowSpan="2" Background="#EEEFF3" Width="100">
             <Button Content="Student" HorizontalAlignment="Stretch" Padding="10" Margin="0,10" Command="{Binding NavigateStudentManagementCommand}"/>
             <Button Content="Teacher" HorizontalAlignment="Stretch" Padding="10" Margin="0,10" Command="{Binding NavigateTeacherManagementCommand}"/>
+            <Button Content="Specialization" HorizontalAlignment="Stretch" Padding="10" Margin="0,10" Command="{Binding NavigateSpecializationManagementCommand}"/>
             <Button Content="Class" HorizontalAlignment="Stretch" Padding="10" Margin="0,10" Command="{Binding NavigateClassManagementCommand}"/>
             <Button Content="Subject" HorizontalAlignment="Stretch" Padding="10" Margin="0,10" Command="{Binding NavigateSubjectManagementCommand}"/>
         </StackPanel>
@@ -51,6 +52,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vms:ClassManagementViewModel}">
                     <views:ClassManagementPage/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:SpecializationManagementViewModel}">
+                    <views:SpecializationManagementPage/>
                 </DataTemplate>
             </Grid.Resources>
         </Grid>

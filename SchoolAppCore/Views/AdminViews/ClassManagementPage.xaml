@@ -16,6 +16,9 @@
                 <DataTemplate DataType="{x:Type adminviewmodels:ClassFormViewModel}">
                     <forms:ClassForm Width="200"/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type adminviewmodels:ClassSubjectFormViewModel}">
+                    <forms:ClassSubjectForm Width="200"/>
+                </DataTemplate>
             </ContentControl.Resources>
         </custom:Modal>
         <Grid>
@@ -36,7 +39,7 @@
                 <ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="ClassName"/>
             </StackPanel>
             <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1" Margin="10">
-                <Grid>
+                <Grid  IsEnabled="{Binding IsClassSelected}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -45,32 +48,32 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
                         <Label Content="Supervisor:"/>
-                        <ComboBox ItemsSource="{Binding Professors}" SelectedItem="{Binding SelectedClass.Supervisor, Mode=TwoWay}" DisplayMemberPath="FullName"/>
+                        <ComboBox ItemsSource="{Binding Professors}" SelectedItem="{Binding SelectedProfessor, Mode=OneWay}" DisplayMemberPath="FullName"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 0 0 5">
                         <Label Content="Specialization:"/>
-                        <ComboBox/>
+                        <ComboBox ItemsSource="{Binding Specializations}" SelectedItem="{Binding SelectedSpecialization, Mode=OneWay}" DisplayMemberPath="SpecName"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Vertical">
                         <Label Content="Subjects"/>
-                        <ListView x:Name="subjectListView" ItemsSource="{Binding SubjectList}" >
+                        <ListView x:Name="subjectListView" ItemsSource="{Binding ClassSubjects}" SelectedItem="{Binding SelectedClassSubject}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="">
+                                    <GridViewColumn Header="Final Test">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsSelected}" />
+                                                <CheckBox IsChecked="{Binding HasSemesterPaper}" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Subject Name" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Subject Name" DisplayMemberBinding="{Binding Subject.SubjectName}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Remove Subject"/>
-                        <Button Content="Add Subject"/>
+                        <Button Content="Remove Subject" Command="{Binding RemoveSubjectFromClassCommand}"/>
+                        <Button Content="Add Subject" Command="{Binding AddSubjectCommand}"/>
                     </StackPanel>
                 </Grid>
             </Border>

@@ -16,12 +16,17 @@
 
         <StackPanel Margin="5">
             <TextBlock Text="Select Subject:"/>
-            <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Professors}"
-                      SelectedItem="{Binding SelectedProfessor}"
-                      DisplayMemberPath="FullName"/>
+            <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding PossibleSubjects}"
+                      SelectedItem="{Binding SelectedSubject}"
+                      DisplayMemberPath="SubjectName"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
+            <TextBlock Text="Has Final Test:"/>
+            <CheckBox IsChecked="{Binding HasFinalTest}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Cancel" Margin="10" Command="{Binding CancelCommand}"/>
             <Button Content="Ok" Margin="10" Command="{Binding AddSubjectCommand}"/>
         </StackPanel>

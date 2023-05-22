@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Animation;
 
 namespace SchoolAppCore.ViewModels.AdminViewModels
@@ -50,14 +51,25 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 		[RelayCommand]
 		public void AddClass()
 		{
-			using (var context = new SchoolDbContext())
+			try
 			{
-				context.Database.ExecuteSql($"InsertClass {year}, {selectedSpecialization.SpecId}, {selectedSupervisor.Id}");
+				using (var context = new SchoolDbContext())
+				{
+					context.Database.ExecuteSql($"InsertClass {year}, {selectedSpecialization.SpecId}, {selectedSupervisor.Id}");
+
+				}
 
 			}
-			viewModel.UpdateFromDatabase();
+			catch (Exception e)
+			{
+				MessageBox.Show("Error: " + e);
+			}
+			finally
+			{
+				viewModel.UpdateClassesFromDatabase();
 
-			navigation.CloseModal();
+				navigation.CloseModal();
+			}
 		}
 
 		[RelayCommand]

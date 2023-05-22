@@ -20,4 +20,6 @@ public partial class Class
     public virtual Specialization? Spec { get; set; }
 
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+
+	public virtual string? ClassName => ClassYear.ToString() + '/' + Spec?.SpecName;
 }

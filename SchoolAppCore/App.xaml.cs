@@ -28,8 +28,8 @@ namespace SchoolAppCore
 			services.AddSingleton<NavigationService>(s => CreateInitialNavigationService(s));
 
 			services.AddTransient<LoginViewModel>(CreateLoginViewModel);
-			services.AddTransient<StudentPageViewModel>(CreateStudentViewModel);
-			services.AddTransient<TeacherPageViewModel>(CreateTeacherViewModel);
+			//services.AddTransient<StudentPageViewModel>(CreateStudentViewModel);
+			//services.AddTransient<TeacherPageViewModel>(CreateTeacherViewModel);
 			services.AddTransient<AdminPageViewModel>(CreateAdminPageViewModel);
 
 			services.AddSingleton<MainWindow>(s => new MainWindow() 
@@ -47,15 +47,15 @@ namespace SchoolAppCore
 				serviceProvider.GetRequiredService<ModalNavigationStore>());
 		}
 
-		private TeacherPageViewModel CreateTeacherViewModel(IServiceProvider serviceProvider)
-		{
-			return new TeacherPageViewModel(serviceProvider.GetRequiredService<AdminNavigationStore>());
-		}
+		//private TeacherPageViewModel CreateTeacherViewModel(IServiceProvider serviceProvider)
+		//{
+		//	return new TeacherPageViewModel(serviceProvider.GetRequiredService<NavigationStore>());
+		//}
 
-		private StudentPageViewModel CreateStudentViewModel(IServiceProvider serviceProvider)
-		{
-			return new StudentPageViewModel(serviceProvider.GetRequiredService<AdminNavigationStore>());
-		}
+		//private StudentPageViewModel CreateStudentViewModel(IServiceProvider serviceProvider)
+		//{
+		//	return new StudentPageViewModel(serviceProvider.GetRequiredService<NavigationStore>());
+		//}
 
 		private LoginViewModel CreateLoginViewModel(IServiceProvider serviceProvider)
 		{
@@ -77,7 +77,7 @@ namespace SchoolAppCore
 		{
 			return new NavigationService(
 				serviceProvider.GetRequiredService<NavigationStore>(), 
-				() => serviceProvider.GetRequiredService<AdminPageViewModel>());
+				() => serviceProvider.GetRequiredService<LoginViewModel>());
 		}
 	}
 }

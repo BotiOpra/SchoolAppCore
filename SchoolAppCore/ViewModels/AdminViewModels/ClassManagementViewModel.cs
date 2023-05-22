@@ -10,11 +10,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SchoolAppCore.ViewModels.AdminViewModels
 {
-    public partial class ClassManagementViewModel : ObservableObject
-    {
+	public partial class ClassManagementViewModel : ObservableObject
+	{
 		private SchoolDbContext _context;
 		private readonly ModalNavigationStore _modalNavigationStore;
 
@@ -32,11 +33,8 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 				.Select(c => new ClassVM(c)).ToList());
 
 			Specializations = new ObservableCollection<Specialization>(_context.Specializations);
-			Professors = new ObservableCollection<ProfessorVM>(
-						Classes.Select(c=>c.Supervisor)
-					);
-
-			
+			Professors = new ObservableCollection<ProfessorVM>(_context.Professors.Select(p => new ProfessorVM(p)));
+			ClassSubjects = new ObservableCollection<ClassSubject>();
 		}
 
 		public bool IsModalOpen => _modalNavigationStore.IsOpen;
@@ -59,7 +57,45 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 		ObservableCollection<ProfessorVM> professors;
 
 		[ObservableProperty]
+		ObservableCollection<ClassSubject> classSubjects;
+
+		[ObservableProperty]
+		[NotifyPropertyChangedFor(nameof(IsSubjectSelected))]
+		[NotifyCanExecuteChangedFor(nameof(RemoveSubjectFromClassCommand))]
+		ClassSubject selectedClassSubject;
+
+		[ObservableProperty]
+		[NotifyPropertyChangedFor(nameof(SelectedProfessor))]
+		[NotifyPropertyChangedFor(nameof(SelectedSpecialization))]
+		[NotifyPropertyChangedFor(nameof(ClassSubjects))]
+		[NotifyPropertyChangedFor(nameof(IsClassSelected))]
+		[NotifyCanExecuteChangedFor(nameof(AddSubjectCommand))]
 		ClassVM selectedClass;
+
+		partial void OnSelectedClassChanged(ClassVM? oldValue, ClassVM newValue)
+		{
+			if (newValue != null)
+				ClassSubjects = new ObservableCollection<ClassSubject>(_context.ClassSubjects
+				.Include(cs => cs.Class)
+				.Include(cs => cs.Subject)
+				.Where(cs => cs.ClassId == SelectedClass.Id));
+
+			else
+				ClassSubjects = new ObservableCollection<ClassSubject>();
+		}
+
+		public ProfessorVM SelectedProfessor
+		{
+			get
+			{
+				return Professors.Where(p => p.Id == SelectedClass?.Supervisor.Id).FirstOrDefault();
+			}
+		}
+
+		public Specialization SelectedSpecialization
+		{
+			get => Specializations.Where(s => s.SpecId == SelectedClass?.Specialization.SpecId).FirstOrDefault();
+		}
 
 		[RelayCommand]
 		public void AddClass()
@@ -67,13 +103,39 @@ namespace SchoolAppCore.ViewModels.AdminViewModels
 			_modalNavigationStore.CurrentViewModel = new ClassFormViewModel(this, _modalNavigationStore);
 		}
 
-		public void UpdateFromDatabase()
+		[RelayCommand(CanExecute = nameof(IsClassSelected))]
+		public void AddSubject()
+		{
+			_modalNavigationStore.CurrentViewModel = new ClassSubjectFormViewModel(this, _modalNavigationStore);
+		}
+
+		[RelayCommand(CanExecute = nameof(IsSubjectSelected))]
+		public void RemoveSubjectFromClass()
+		{
+			_context.Database.ExecuteSql($"RemoveSubjectFromClass {SelectedClassSubject.SubjectId}, {SelectedClass.Id}");
+			MessageBox.Show("Subject removed from class");
+
+			UpdateSubjectsFromDatabase();
+		}
+
+		public void UpdateClassesFromDatabase()
 		{
 			Classes = new ObservableCollection<ClassVM>(
 				_context.Classes.Include(c => c.Prof)
 				.Include(c => c.Spec)
 				.Include(c => c.ClassSubjects)
 				.Select(c => new ClassVM(c)).ToList());
+		}
+
+		public bool IsClassSelected => SelectedClass != null;
+		public bool IsSubjectSelected => SelectedClassSubject != null;
+
+		public void UpdateSubjectsFromDatabase()
+		{
+			ClassSubjects = new ObservableCollection<ClassSubject>(_context.ClassSubjects
+					.Include(cs => cs.Class)
+					.Include(cs => cs.Subject)
+					.Where(cs => cs.ClassId == SelectedClass.Id));
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace SchoolAppCore.ViewModels.EntityViewModels
 	public partial class ClassVM : ObservableObject
 	{
 		private readonly Class _class;
+		public Class Class => _class;
 		public ClassVM(Class @class)
 		{
 			_class = @class;
@@ -23,7 +24,11 @@ namespace SchoolAppCore.ViewModels.EntityViewModels
 
 		public int Id => _class.ClassId;
 
-		public string Year => _class.ClassYear.ToString();
+		public string Year
+		{
+			get => _class.ClassYear.ToString();
+			//set => SetProperty(_class.ClassYear, value, _class, (c, y) => c.ClassYear = y);
+		}
 
 		private ProfessorVM _supervisor;
 		public ProfessorVM Supervisor
@@ -41,5 +46,27 @@ namespace SchoolAppCore.ViewModels.EntityViewModels
 		public ObservableCollection<ClassSubject> ClassSubjects;
 
 		public string ClassName => Year + '/' + Specialization.SpecName;
+
+		internal void AddSubject(SubjectVM selectedSubject, bool hasFinalTest)
+		{
+			ClassSubjects.Add(new ClassSubject()
+			{
+				ClassId = Id,
+				SubjectId = selectedSubject.SubjectId,
+				HasSemesterPaper = hasFinalTest
+			});
+
+			using (var context = new SchoolDbContext())
+			{
+				context.ClassSubjects.Add(new ClassSubject()
+				{
+					ClassId = Id,
+					SubjectId = selectedSubject.SubjectId,
+					HasSemesterPaper = hasFinalTest
+				});
+
+				context.SaveChanges();
+			}
+		}
 	}
 }

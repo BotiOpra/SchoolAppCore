@@ -38,6 +38,15 @@ namespace SchoolAppCore.ViewModels.EntityViewModels
 			}
 		}
 
+		public string Email
+		{
+			get => _professor.Email;
+			set
+			{
+				SetProperty(_professor.Email, value, _professor, (p, e) => p.Email = e);
+			}
+		}
+
 		public string FullName => FirstName + ' ' + LastName;
 	}
 }

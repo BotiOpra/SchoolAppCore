@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using SchoolAppCore.Models;
-using SchoolAppCore.Models.DTOs;
 using SchoolAppCore.Stores;
 using SchoolAppCore.ViewModels.EntityViewModels;
 using System;

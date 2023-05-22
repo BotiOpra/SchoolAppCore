@@ -7,7 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
-    <Grid>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Teacher Management Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Professors}" SelectedItem="{Binding SelectedProfessor}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="100"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="250"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button HorizontalAlignment="Right" Content="Save" Command="{Binding SaveCommand}"/>
+            <Button HorizontalAlignment="Right" Content="Delete" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

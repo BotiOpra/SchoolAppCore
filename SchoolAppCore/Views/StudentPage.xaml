@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Student Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <TextBlock Grid.Row="0" Text="{Binding StudentName}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -24,11 +24,16 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListView>
-                <ListViewItem Content="Kecske"/>
-                <ListViewItem Content="Pasztor"/>
-                <ListViewItem Content="Vagyok"/>
+            <ListView ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}">
+                <ListView.View>
+                    <GridView >
+                        <GridView.Columns>
+                            <GridViewColumn Header="Subject Name" DisplayMemberBinding="{Binding SubjectName}" />
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
             </ListView>
+
 
             <Button Grid.Column="1" Content="Download Course Material" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
 
@@ -41,19 +46,19 @@
 
                 <StackPanel Grid.Row="0" Orientation="Vertical">
                     <TextBlock Text="Grades"/>
-                    <ListView>
-                        <ListViewItem Content="Column 3 - Row 1"/>
-                        <ListViewItem Content="Column 3 - Row 2"/>
-                        <ListViewItem Content="Column 3 - Row 3"/>
+                    <ListView ItemsSource="{Binding Grades}" DisplayMemberPath="GradeVal">
+                        
                     </ListView>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0 5 0 0">
                     <TextBlock Text="Absences"/>
-                    <ListView>
-                        <ListViewItem Content="Column 3 - Row 1"/>
-                        <ListViewItem Content="Column 3 - Row 2"/>
-                        <ListViewItem Content="Column 3 - Row 3"/>
+                    <ListView ItemsSource="{Binding Absences}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Absence Date" DisplayMemberBinding="{Binding AbsenceDate, StringFormat={}{0:yyyy-MM-dd}}" />
+                            </GridView>
+                        </ListView.View>
                     </ListView>
                 </StackPanel>
 
