@@ -75,7 +75,16 @@ namespace SchoolAppCore.ViewModels
 			}
 			else if(user.Role == "headteacher")
 			{
-				HeadTeacher headteacher = _context.HeadTeachers.Include(t => t.EmailNavigation).Include(t => t.Class).Where(t => t.Email == Username).First();
+				HeadTeacher headteacher = _context.HeadTeachers
+					.Include(t => t.EmailNavigation)
+					.Include(t => t.Class)
+					.ThenInclude(c=>c.Students)
+					.ThenInclude(s=>s.Absences)
+					.Include(t2=>t2.Class)
+					.ThenInclude(c2=>c2.Students)
+					.ThenInclude(s2=>s2.Grades)
+					.ThenInclude(g=>g.Subject)
+					.Where(t => t.Email == Username).First();
 
 				_navigationStore.CurrentViewModel = new HeadTeacherViewModel(headteacher, _modalNavigationStore);
 			}

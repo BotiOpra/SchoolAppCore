@@ -42,43 +42,99 @@ namespace SchoolAppCore.ViewModels
 
 		public bool IsModalOpen => _navigationStore.IsOpen;
 
-		public ObservableCollection<Subject> Subjects { get; }
+		[ObservableProperty]
+		ObservableCollection<Subject> subjects;
 
-		public ObservableCollection<Class> Classes => new ObservableCollection<Class>(DetermineClasses());
-		public ObservableCollection<Student> SelectedClassStudents => new ObservableCollection<Student>(DetermineStudents());
-		public ObservableCollection<Absence> Absences => new ObservableCollection<Absence>(LoadAbsences());
+		[ObservableProperty]
+		ObservableCollection<Class> classes;
+
+		[ObservableProperty]
+		ObservableCollection<Student> selectedClassStudents;
+
+		[ObservableProperty]
+		ObservableCollection<Absence> absences;
+
+		[ObservableProperty]
+		ObservableCollection<Grade> studentGrades;
 
 		private IEnumerable<Absence> LoadAbsences()
 		{
 			if(SelectedStudent == null)
 				return Enumerable.Empty<Absence>();
 
-			return SelectedStudent.Absences;
+			return SelectedStudent.Absences.Where(a=>a.SubjectId == SelectedSubject.SubjectId);
 		}
 
-		public ObservableCollection<Grade> StudentGrades => new ObservableCollection<Grade>(LoadGrades());
 
 		private IEnumerable<Grade> LoadGrades()
 		{
 			if (SelectedStudent == null)
 				return Enumerable.Empty<Grade>();
 
-			return SelectedStudent.Grades;
+			return SelectedStudent.Grades.Where(g=>g.SubjectId==SelectedSubject.SubjectId);
 		}
 
 		[ObservableProperty]
 		[NotifyPropertyChangedFor(nameof(Classes))]
 		[NotifyPropertyChangedFor(nameof(SelectedClassStudents))]
+		[NotifyPropertyChangedFor(nameof(StudentGrades))]
+		[NotifyPropertyChangedFor(nameof(Absences))]
 		Subject selectedSubject;
+
+		partial void OnSelectedSubjectChanged(Subject value)
+		{
+			if(value != null)
+			{
+				SelectedClass = null;
+				Classes = new ObservableCollection<Class>(DetermineClasses());
+				SelectedClassStudents = new ObservableCollection<Student>();
+				Absences = new ObservableCollection<Absence>();
+				StudentGrades = new ObservableCollection<Grade>();
+			}
+		}
 
 		[ObservableProperty]
 		[NotifyPropertyChangedFor(nameof(SelectedClassStudents))]
+		[NotifyPropertyChangedFor(nameof(StudentGrades))]
+		[NotifyPropertyChangedFor(nameof(Absences))]
 		Class selectedClass;
+
+		partial void OnSelectedClassChanged(Class value)
+		{
+			if (value != null)
+			{
+				SelectedClassStudents = new ObservableCollection<Student>(DetermineStudents());
+				Absences = new ObservableCollection<Absence>();
+				StudentGrades = new ObservableCollection<Grade>();
+			}
+		}
 
 		[ObservableProperty]
 		[NotifyPropertyChangedFor(nameof(StudentGrades))]
 		[NotifyPropertyChangedFor(nameof(Absences))]
 		Student selectedStudent;
+
+		partial void OnSelectedStudentChanged(Student value)
+		{
+			if (value != null)
+			{
+				Absences = new ObservableCollection<Absence>(LoadAbsences());
+				Absences.CollectionChanged += OnAbsencesChanged;
+
+				StudentGrades = new ObservableCollection<Grade>(LoadGrades());
+				StudentGrades.CollectionChanged += OnGradesChanged;
+			}
+		}
+
+		private void OnGradesChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+            Console.WriteLine();
+        }
+
+		private void OnAbsencesChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+            Console.WriteLine();
+		}
 
 		[ObservableProperty]
 		Absence selectedAbsence;

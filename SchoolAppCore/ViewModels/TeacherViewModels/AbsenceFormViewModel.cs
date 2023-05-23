@@ -38,15 +38,13 @@ namespace SchoolAppCore.ViewModels.TeacherViewModels
 			};
 			
 			using (var context = new SchoolDbContext())
-			{
-				
-
+			{	
 				context.Absences.Add(absence);
 				context.SaveChanges();
 			}
 
+			_parent.Absences.Add(absence);
 			_parent.SelectedStudent.Absences.Add(absence);
-			OnPropertyChanged(nameof(_parent.Absences));
 
 			_parent.LoadAbsencesFromDatabase();
 

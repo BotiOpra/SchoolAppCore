@@ -7,27 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="HeadTeacher Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
-            <Grid HorizontalAlignment="Center">
+        <Border BorderBrush="Gray" BorderThickness="0.5" Grid.Row="1" Margin="10" HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Center" Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel>
+                <StackPanel Margin="0 0 10 0">
                     <TextBlock Text="Students:"/>
-                    <ListView ItemsSource="{Binding SelectedClassStudents}" SelectedItem="{Binding SelectedStudent}">
+                    <ListView ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -37,33 +37,29 @@
                     </ListView>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Vertical">
+                <StackPanel Grid.Column="1" Orientation="Vertical"  Margin="0 0 10 0">
                     <TextBlock Text="Absences:"/>
                     <ListView ItemsSource="{Binding Absences}" SelectedItem="{Binding SelectedAbsence}">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AbsenceDate, StringFormat={}{0:yyyy-MM-dd}}"/>
+                                <GridViewColumn Header="Date" Width="100" DisplayMemberBinding="{Binding AbsenceDate, StringFormat={}{0:yyyy-MM-dd}}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Add" Command="{Binding OpenAddAbsenceCommand}"/>
-                        <Button Content="Remove"/>
+                        <Button Content="Remove" Command="{Binding RemoveAbsenceCommand}" Margin="0 5 0 0"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                <StackPanel Grid.Column="2" Orientation="Vertical">
                     <TextBlock Text="Grades:"/>
-                    <ListView ItemsSource="{Binding StudentGrades}" SelectedItem="{Binding SelectedGrade}">
+                    <ListView ItemsSource="{Binding Grades}" SelectedItem="{Binding SelectedGrade}">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Grade" DisplayMemberBinding="{Binding GradeVal}"/>
+                                <GridViewColumn Header="Grade" Width="100" DisplayMemberBinding="{Binding GradeVal}"/>
+                                <GridViewColumn Header="Subject" Width="100" DisplayMemberBinding="{Binding Subject.SubjectName}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Add" Command="{Binding OpenAddGradeCommand}"/>
-                        <Button Content="Remove"/>
-                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>

@@ -43,6 +43,7 @@ namespace SchoolAppCore.ViewModels.TeacherViewModels
 				context.SaveChanges();
 			}
 
+			_parent.StudentGrades.Add(grade);
 			_parent.SelectedStudent.Grades.Add(grade);
 
 			_parent.LoadGradesFromDatabase();
